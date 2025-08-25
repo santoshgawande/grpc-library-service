@@ -1,0 +1,97 @@
+syntax = "proto3";
+package library;
+
+service LibraryService {
+  rpc GetBook (GetBookRequest) returns (Book) {}
+  rpc ListBooks (Empty) returns (BookList) {}
+  rpc AddBook (Book) returns (Book) {}
+  rpc PartialUpdateBook (Book) returns (Book) {}
+  rpc DeleteBook (GetBookRequest) returns (Empty) {}
+  rpc BorrowBook (BorrowBookRequest) returns (Borrowing) {}
+  rpc ReturnBook (ReturnBookRequest) returns (ReturnBookResponse);
+  rpc AddMember (Member) returns (Member) {}
+  rpc ListMembers (Empty) returns (MemberList) {}
+  rpc GetMember (GetMemberRequest) returns (Member) {}
+  rpc UpdateMember (Member) returns (Member) {}
+  rpc DeleteMember (GetMemberRequest) returns (Empty) {}
+  rpc ListBorrowings (Empty) returns (BorrowingList) {}
+  rpc GetBorrowing (GetBorrowingRequest) returns (Borrowing) {}
+  rpc ListBorrowingsByMember (GetMemberRequest) returns (BorrowingList) {}
+  rpc ListBorrowingsByBook (GetBookRequest) returns (BorrowingList) {}
+
+}
+
+
+
+message Empty {}
+
+message Book {
+  int32 id = 1;
+  string title = 2;
+  string author = 3;
+  string isbn = 4;
+  int32 copies_total = 5;
+  int32 copies_available = 6;
+}
+
+message BookList {
+  repeated Book books = 1;
+}
+
+
+message GetBookRequest {
+  int32 id = 1;
+}
+
+
+message Member {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+}
+
+message MemberList {
+  repeated Member members = 1;
+}
+
+message GetMemberRequest {
+  int32 id = 1;
+}
+
+
+message Borrowing {
+  int32 id = 1;
+  int32 book_id = 2;
+  int32 member_id = 3;
+  string borrow_date = 4;
+  string due_date = 5;
+  string return_date = 6;
+  double fine = 7;
+
+}
+
+message BorrowingList {
+  repeated Borrowing borrowings = 1;
+}
+
+message BorrowBookRequest {
+  int32 book_id = 1;
+  int32 member_id = 2;
+  int32 due_days = 3; // Number of days until due date (optional)
+}
+
+
+
+message GetBorrowingRequest {
+  int32 id = 1;
+}
+
+message ReturnBookRequest {
+  int32 borrowing_id = 1;
+  double fine_per_day = 2; // Optional, for flexible fine calculation
+}
+
+message ReturnBookResponse {
+  Borrowing borrowing = 1;
+}
