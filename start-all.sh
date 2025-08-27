@@ -41,7 +41,20 @@ fi
 # Apply schema (wait a bit for DB to be ready)
 echo "Waiting for PostgreSQL to be ready..."
 sleep 3
-docker exec -i libdb psql -U postgres -d library < db/schema.sql
+# docker exec -i libdb psql -U postgres -d library < db/schema.sql
+docker exec -i libdb psql -U postgres -d library < db/test_schema.sql
+
+
+
+# Install Python dependencies if venv does not exist
+if [ ! -d backend/venv ]; then
+    echo "Creating Python venv and installing requirements..."
+    cd backend
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    cd ..
+fi
 
 # Start backend (Python gRPC server) with venv activation
 cd backend/app
@@ -50,11 +63,32 @@ nohup python3 server.py > ../../$LOGDIR/backend.log 2>&1 &
 echo $! > ../../$RUNDIR/backend.pid
 cd ../..
 
+
+
+# Install Node.js dependencies for gateway if node_modules does not exist
+if [ ! -d gateway/node_modules ]; then
+    echo "Installing gateway Node.js dependencies..."
+    cd gateway
+    npm install express cors @grpc/grpc-js @grpc/proto-loader
+    cd ..
+fi
+
 # Start gateway (Node.js)
 cd gateway
 nohup node index.js > ../$LOGDIR/gateway.log 2>&1 &
 echo $! > ../$RUNDIR/gateway.pid
 cd ..
+
+
+
+# Install Node.js dependencies for frontend if node_modules does not exist
+if [ ! -d frontend/node_modules ]; then
+    echo "Installing frontend Node.js dependencies..."
+    cd frontend
+    npm install react react-dom axios
+    npm install --save-dev vite
+    cd ..
+fi
 
 # Start frontend (Vite/React)
 cd frontend

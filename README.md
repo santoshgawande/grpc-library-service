@@ -48,8 +48,9 @@ This project demonstrates a modern microservice architecture for a library syste
 │   │   ├── server.py
 │   │   └── proto
 │   │       └── library.proto
-│   └── db
-│       └── schema.sql
+├── db
+│   ├── schema.sql
+│   └── test_schema.sql   # For testing/sample data
 ├── frontend
 │   └── ...
 ├── gateway
@@ -95,7 +96,10 @@ docker run --name libdb -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres 
 
 # If already created:
 docker start libdb
+# For normal schema:
 docker exec -i libdb psql -U postgres -d library < db/schema.sql
+# For test/sample data (recommended for development/testing):
+# docker exec -i libdb psql -U postgres -d library < db/test_schema.sql
 ```
 
 #### 2. Check the Database
@@ -109,7 +113,17 @@ docker exec -i libdb psql -U postgres -d library -c "SELECT * FROM books;"
 
 ```bash
 cd backend
+# (Recommended) Create and activate a Python virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Compile proto files
 python3 -m grpc_tools.protoc -I . --python_out=app --grpc_python_out=app ./proto/library.proto
+
+# Run the server
 cd app
 python3 server.py
 ```
@@ -118,7 +132,8 @@ python3 server.py
 
 ```bash
 cd gateway
-npm install
+# Install required packages (if not already in package.json)
+npm install express cors @grpc/grpc-js @grpc/proto-loader
 node index.js
 ```
 
@@ -126,7 +141,9 @@ node index.js
 
 ```bash
 cd frontend
-npm install
+# Install required packages (if not already in package.json)
+npm install react react-dom axios
+npm install --save-dev vite
 npm run dev
 ```
 
@@ -147,7 +164,10 @@ npm run dev
 - To manually apply schema:
 
     ```bash
+    # For normal schema:
     docker exec -i libdb psql -U postgres -d library < db/schema.sql
+    # For test/sample data (recommended for development/testing):
+    docker exec -i libdb psql -U postgres -d library < db/test_schema.sql
     ```
 
 ---
