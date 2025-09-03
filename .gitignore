@@ -1,3 +1,6 @@
+# Ignore feedback and markdown files
+assignment_feedback.md
+feedback.md
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -36,7 +39,7 @@ backend/app/*_pb2_grpc.py
 .vscode/
 
 # Node modules (for frontend)
-frontend/node_modules/
+node_modules/
 
 # Logs and runtime files
 .logs/
@@ -47,3 +50,4 @@ frontend/node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+

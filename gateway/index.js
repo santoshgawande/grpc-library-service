@@ -4,7 +4,7 @@ const cors = require('cors');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
-const PROTO_PATH = '../backend/proto/library.proto'; // Path to your proto file
+const PROTO_PATH = './proto/library.proto'; // Path to your proto file
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
     keepCase: true,

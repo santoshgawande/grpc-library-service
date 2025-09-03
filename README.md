@@ -43,7 +43,6 @@ This project demonstrates a modern microservice architecture for a library syste
 .
 ├── backend
 │   ├── app
-│   │   ├── __init__.py
 │   │   ├── client.py
 │   │   ├── server.py
 │   │   └── proto
@@ -55,10 +54,11 @@ This project demonstrates a modern microservice architecture for a library syste
 │   └── ...
 ├── gateway
 │   └── index.js
-├── .logs/         # All service logs
-├── .run/          # All PID files
-├── start-all.sh   # Start all services
-└── stop-all.sh    # Stop all services
+├── scripts/
+│   ├── start-all.sh   # Start all services
+│   ├── stop-all.sh    # Stop all services
+│   ├── .logs/         # All service logs
+│   └── .run/          # All PID files
 ```
 
 ---
@@ -72,17 +72,17 @@ This project demonstrates a modern microservice architecture for a library syste
 To **start all services** (database, backend, gateway, frontend) in the background:
 
 ```bash
-./start-all.sh
+scripts/start-all.sh
 ```
 
 To **stop all services** and the database container:
 
 ```bash
-./stop-all.sh
+scripts/stop-all.sh
 ```
 
-- Logs are stored in `.logs/`
-- PID files are stored in `.run/`
+- Logs are stored in `scripts/.logs/`
+- PID files are stored in `scripts/.run/`
 
 ---
 
@@ -151,8 +151,8 @@ npm run dev
 
 ## Logs & Runtime Files
 
-- **Logs:** All service logs are stored in `.logs/`
-- **PID files:** All process IDs are stored in `.run/`
+- **Logs:** All service logs are stored in `scripts/.logs/`
+- **PID files:** All process IDs are stored in `scripts/.run/`
 - Both directories are excluded from git via `.gitignore`
 
 ---
